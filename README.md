@@ -91,6 +91,28 @@ Beiträge sind willkommen — bitte lies vorher:
 
 ---
 
+## 🤖 Automatisierung
+
+Bestimmte Metadaten werden **automatisch generiert** aus dem Git-Workflow:
+
+- **Changelog** (`manuscript/_meta/changelog.md`) → aus Git-Commit-History
+- **Pattern/Case/Scene-Indexes** → aus Blueprint-Dateien
+- **book.yml** (`edition`) → aus Git-Tags
+
+**Manuelle Nutzung:**
+```bash
+npm install          # Einmalig: Dependencies installieren
+npm run meta:update  # Alle Meta-Files aktualisieren
+```
+
+**Automatisierung:**
+- **Git-Hook (lokal):** Aktualisiert Meta-Files bei `git push`
+- **GitHub Actions (CI):** Aktualisiert automatisch bei Push zu `main`
+
+Siehe [`scripts/README.md`](scripts/README.md) für Details.
+
+---
+
 ## 📄 Lizenz
 
 Siehe `LICENSE`.

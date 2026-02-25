@@ -1,236 +1,627 @@
-# llms.txt — Verhaltensregeln für LLMs im Projekt „The PDD Manifesto“
+---
 
-Dieses Dokument definiert, wie ein LLM mit diesem Repository arbeiten darf.  
-Es ist verbindlich.  
-Es schützt Struktur, Stimme, Workflow und Reproduzierbarkeit des Buchprojekts.
+## 🧑‍💻 Verhaltensregeln für Menschen (Human-in-the-Loop)
 
-Sprache: Deutsch  
-Format: Markdown → statisches HTML (GitHub Pages, /docs)  
-Kein Jekyll. Kein CMS. Keine Magie.
+Dieses Projekt ist ein **kollaboratives System** zwischen Mensch und LLM.
+Der Mensch ist **Architekt des Intents**, das LLM ist **struktureller Schreibmotor**.
 
 ---
 
-# 1) Projekt-Intent
+### Regel H1: Du bist Architekt, nicht Schreiber
 
-Dieses Repository ist ein Buchprojekt über Prompt-Driven Development (PDD).
+**Deine Rolle:**
+- ✅ Intent definieren (Was soll erreicht werden?)
+- ✅ Constraints setzen (Was darf/muss (nicht) passiert?)
+- ✅ Qualität validieren (Ist das Ergebnis gut genug?)
+- ✅ Entscheidungen treffen (Welcher Weg wird gewählt?)
 
-Das Buch behandelt:
-- Prompts als Spezifikationen/Verträge (nicht „Vibes“)
-- Architektur & Patterns für KI-gestützte Systeme
-- Governance, Reproduzierbarkeit, Validierung, Verantwortung
+**Nicht deine Rolle:**
+- ❌ Komplette Kapitel alleine schreiben (ineffizient)
+- ❌ LLM-Output blindlings akzeptieren (unkritisch)
+- ❌ Struktur ad-hoc erfinden (Blueprint existiert)
 
-Das Repository selbst demonstriert diese Prinzipien:
-- strukturierte Artefakte  
-- versionierte Prompts  
-- explizite Regeln  
-- auditierbare Claims  
-- deterministische Builds  
-
-Ein LLM muss diese Prinzipien respektieren und verstärken.
-
----
-
-# 2) Repository-Architektur (Quelle vs. Artefakt)
-
-- `/manuscript` = **Source of Truth**  
-  (Kapitel, Blueprints, Prompts, Research, Worklog, Metadaten)
-
-- `/docs` = **Build Output**  
-  (statisches HTML, GitHub Pages)
-
-- `/templates` = HTML-Templates
-
-- `/scripts` = Build- und Check-Tools
-
-**Regel:**  
-LLMs dürfen `/docs` niemals direkt verändern.
+**Beispiel:**
+- ❌ "Ich schreibe jetzt 10 Seiten zu Kapitel 1"
+- ✅ "Ich fülle Blueprint aus → LLM schreibt Draft → ich reviewe → ich entscheide"
 
 ---
 
-# 3) Single Source of Truth: TOC
+### Regel H2: Zeitbudget explizit setzen
 
-`manuscript/_meta/toc.yml` definiert:
-- Kapitelreihenfolge  
-- Navigation  
-- Struktur des Buches  
+**Vor jeder Session:**
+1. Entscheide: Wie viel Zeit habe ich?
+   - 15 Minuten
+   - 30 Minuten
+   - 60 Minuten
+   - 2–3 Stunden
+   - Wochenende
 
-Alles andere wird davon abgeleitet.
+2. Wähle passende Aufgabe (siehe `workflow-paper.md`, Zeile 43-97)
 
-Ein LLM darf die Struktur **niemals ignorieren**.
+**Entscheidungsmatrix:**
 
----
+| Zeit | Aufgabe | Beispiel |
+|------|---------|----------|
+| **15 min** | Micro-Tasks | Tippfehler korrigieren, Status prüfen, Glossar-Begriff hinzufügen |
+| **30 min** | Struktur | Blueprint ausfüllen, TOC validieren, Claims sammeln |
+| **60 min** | Schreiben | Draft für 1 Kapitel (via Prompts) |
+| **2–3 h** | Deep Work | Review + Überarbeitung + Status-Übergang |
+| **Wochenende** | Milestone | Mehrere Kapitel abschließen, Cross-Reference-Check |
 
-# 4) Workflow-Regeln (nicht verhandelbar)
+**Warum wichtig?**
+- Verhindert Perfektionismus ("ich muss das ganze Kapitel fertig machen")
+- Erzwingt Fokus (kleine Schritte)
+- Macht Fortschritt sichtbar (Worklog)
 
-1. **One chapter = one feature branch.**  
-2. **Blueprint first.** Kein Kapitel ohne Blueprint.  
-3. **Status-driven writing:**  
-   `draft → review → final`  
-4. **Prompts sind versioniert wie Code.**  
-5. **Wenn etwas wie ein Fakt klingt → Claim anlegen.**
-
-Ein LLM muss diese Regeln aktiv durchsetzen.
-
----
-
-# 5) Kapitelstruktur (Pflicht)
-
-Jedes Kapitel beginnt mit YAML-Frontmatter:
-- `id`
-- `title`
-- `part`
-- `status`
-
-Der Inhalt muss enthalten:
-- TL;DR (3–6 Bulletpoints)
-- Kernthese (2–5 Sätze)
-- Beispiel / Szene / Case Study
-- Snippets (max. 2–3)
-- Checkliste (5–8 Punkte)
-- Takeaways (3–7 Punkte)
-- Optional: Offene Fragen
-
-**Regeln für LLMs:**
-- Keine Politur, bevor Inhalt steht  
-- Keine stilistischen Umschreibungen  
-- Keine Marketing-Sprache  
-- Keine Buzzwords  
+**Quelle:** `workflow-paper.md`
 
 ---
 
-# 6) Blueprints (Planungsartefakte)
+### Regel H3: Prompts als Checklisten verwenden
 
-Blueprints liegen in `manuscript/_blueprints/`:
-- chapter.blueprint.md  
-- pattern.blueprint.md  
-- case-study.blueprint.md  
-- scene.blueprint.md  
+**Prompts sind nicht nur für LLMs, sondern auch für dich.**
 
-Blueprints definieren:
-- Intent  
-- Struktur  
-- Claims  
-- Beispiele  
-- Checklisten  
+**Nutze Prompts als:**
+- ✅ **Checklisten:** Habe ich alle DoD-Kriterien erfüllt?
+- ✅ **Qualitätskriterien:** Ist mein Blueprint vollständig?
+- ✅ **Workflows:** Welcher Schritt kommt als nächstes?
 
-Ein LLM darf **niemals** Prosa erzeugen, bevor der Blueprint steht.
+**Beispiel:**
+1. Du willst ein Kapitel schreiben
+2. Öffne `blueprint-fill.prompt.md`
+3. Gehe die Fragen durch (auch ohne LLM)
+4. Fülle Blueprint aus
+5. **Dann erst:** LLM mit `chapter-draft.prompt.md` beauftragen
 
----
-
-# 7) Research & Claims
-
-- `claims.md` = Behauptungen, die Quellen benötigen  
-- `sources.md` = Quellen mit Datum & Relevanz  
-- `market-notes.md` = Marktbeobachtungen  
-
-Regeln:
-- Keine erfundenen Fakten  
-- Keine unreferenzierten Statistiken  
-- Unklare Fakten → TODO + Claim  
-- LLMs müssen Claims aktiv einfordern  
+**Prompts sind Spezifikationen für LLMs UND Leitplanken für dich.**
 
 ---
 
-# 8) Prompts (First-Class Artifacts)
+### Regel H4: LLM-Output IMMER validieren
 
-Prompts liegen in `manuscript/_prompts/`:
-- chapter-draft.prompt.md  
-- critic.prompt.md  
-- style-enforcer.prompt.md  
-- schema.prompt.md  
+**Niemals blindlings akzeptieren.**
 
-Regeln:
-- Prompts dürfen erweitert, aber nicht „verschönert“ werden  
-- Änderungen müssen minimal und begründet sein  
-- Prompts müssen diffbar bleiben  
+**Validation Checklist (nach jedem LLM-Output):**
+- [ ] Entspricht der Output dem Prompt?
+- [ ] Sind alle erforderlichen Abschnitte vorhanden?
+- [ ] Klingen Fakten plausibel? (Falls nein → Claim prüfen)
+- [ ] Passt der Ton zum Style Guide?
+- [ ] Sind Beispiele konkret (kein "Foo/Bar")?
 
-Ein LLM muss Prompts respektieren und anwenden.
+**Falls NEIN bei irgendeinem Punkt:**
+1. Nutze den zugehörigen Validierungs-Prompt (z.B. `critic.prompt.md`)
+2. Iteriere: Prompt anpassen → neu generieren
+3. Dokumentiere Problem im Worklog
 
----
-
-# 9) Voice & Style Constraints
-
-Das Buch hat eine definierte Stimme:
-- klar  
-- direkt  
-- technisch  
-- architektonisch  
-- gelegentlich trocken-humorvoll  
-- niemals glossy  
-- keine Buzzword-Suppe  
-
-Regeln für LLMs:
-- Satzrhythmus des Autors respektieren  
-- keine stilistischen Umschreibungen  
-- keine „Marketing-Optimierung“  
-- Gender: Entwickler:innen  
+**Du bist Quality Gate, nicht das LLM.**
 
 ---
 
-# 10) Verhalten eines LLMs bei Anfragen
+### Regel H5: Commit early, commit often
 
-Ein LLM muss:
+**Git ist dein Sicherheitsnetz.**
 
-1. **Nach dem relevanten Artefakt fragen**  
-   (Blueprint, Kapitel, Claims, Sources)
+**Workflow:**
+1. ✅ Nach jedem Blueprint → Commit
+2. ✅ Nach jedem Draft → Commit
+3. ✅ Nach jedem Review → Commit
+4. ✅ Nach jeder Status-Änderung → Commit
 
-2. **In kleinsten Schritten arbeiten**  
-   (minimal, testbar, diffbar)
+**Commit-Messages (Conventional Commits):**
+```bash
+feat: add blueprint for 01-prompt-als-spezifikation
+feat(draft): complete chapter 01 first draft
+fix: correct claim in chapter 02 (line 45)
+docs: update prompts README
+chore: regenerate meta files
+```
 
-3. **Definition of Done anwenden**
+**Warum wichtig?**
+- Rollback bei Fehler
+- Nachvollziehbarkeit (wann wurde was geändert?)
+- Changelog-Generierung (automatisch)
 
-4. **Keine großen Textblöcke erzeugen**, außer explizit angefordert
-
-5. **Den Workflow einhalten**  
-   (Blueprint → Draft → Review → Final)
-
-6. **Keine Struktur verletzen**
-
-7. **Keine Fakten erfinden**
-
-8. **Keine Kapitel neu schreiben**, außer explizit angefordert
-
----
-
-# 11) Reset-Verhalten
-
-Wenn ein LLM „neu starten“ soll:
-
-1. `/manuscript/_meta/*` lesen  
-2. `llms.txt` lesen  
-3. `toc.yml` lesen  
-4. Blueprint öffnen  
-5. Kapitel öffnen  
-
-Erst dann darf es arbeiten.
+**Anti-Pattern:**
+- ❌ "Ich committe erst, wenn Kapitel fertig ist" (zu groß)
+- ✅ "Ich committe nach jedem sinnvollen Schritt" (diffbar)
 
 ---
 
-# 12) Non-Goals (verboten)
+### Regel H6: Worklog ist Pflicht, nicht Optional
 
-Ein LLM darf NICHT:
+**Nach jeder Session (auch kurze!):**
+1. Nutze `worklog-reminder.prompt.md` (oder manuell)
+2. Dokumentiere:
+   - Was war das Ziel?
+   - Was wurde erreicht?
+   - Was war das Ergebnis? (✅ / ⚠️ / ❌)
+   - Was sind die nächsten Schritte?
 
-- neue Frameworks vorschlagen  
-- CSS/Themes redesignen  
-- Marketingpläne entwickeln  
-- Kapitel komplett neu schreiben  
-- `/docs` verändern  
-- Build-System ersetzen  
-- Prosa ohne Blueprint erzeugen  
-- Fakten erfinden  
-- Stil verändern  
+**Warum wichtig?**
+- Transparenz: Wer (du/LLM) hat was getan?
+- Lerneffekt: Was funktionierte (nicht)?
+- Fortschritt: Wie viele Sessions braucht ein Kapitel?
+
+**Worklog ist PDD für deinen Schreibprozess.**
+
+**Quelle:** `workflow-paper.md`, Zeile 11
 
 ---
 
-# 13) Ziel des LLMs
+### Regel H7: "Good enough" ist besser als "perfekt"
 
-Ein LLM ist **kein Co-Autor**.  
-Es ist ein **struktureller Schreibmotor**, der:
+**Status-Philosophie:**
 
-- PDD durchsetzt  
-- Struktur schützt  
-- Claims erzwingt  
-- kleine Schritte liefert  
-- Reproduzierbarkeit sicherstellt  
+| Status | Bedeutung | Qualität |
+|--------|-----------|----------|
+| **draft** | Inhalt vollständig, Struktur stabil | 70% |
+| **review** | Sprache geglättet, Claims validiert | 90% |
+| **final** | Veröffentlichbar, keine Blocker | 95% |
 
-Es unterstützt — es übernimmt nicht.
+**Wichtig:**
+- ✅ `draft` ist NICHT "perfekt" – es ist "vollständig"
+- ✅ `review` ist NICHT "druckfertig" – es ist "reviewbar"
+- ✅ `final` ist NICHT "unverbesserbar" – es ist "veröffentlichbar"
+
+**Anti-Pattern:**
+- ❌ "Ich überarbeite Draft 10x, bevor ich ihn als 'review' markiere"
+- ✅ "Ich nutze `status-transition.prompt.md` → bei PASS → Status ändern"
+
+**Quelle:** `workflow-paper.md`, Zeile 162-181
+
+---
+
+### Regel H8: Entscheidungen dokumentieren
+
+**Wenn du von der Struktur abweichst:**
+- ✅ Dokumentiere die Entscheidung (in Blueprint-Notizen oder Worklog)
+- ✅ Begründe sie (warum ist die Abweichung sinnvoll?)
+
+**Beispiel:**
+```markdown
+## 10) Notizen / TODOs
+- **Strukturänderung:** Beispiel kommt VOR Kernthese (statt danach),
+  weil Leser:innen sonst abstrakte These nicht verstehen.
+  Bewusste Abweichung von Standard-Struktur.
+```
+
+**Warum wichtig?**
+- Nachvollziehbarkeit (warum wurde es so gemacht?)
+- Verhindert versehentliche Inkonsistenz
+- Lernen für zukünftige Kapitel
+
+---
+
+### Regel H9: Pausen machen (Drift-Prevention)
+
+**Problem:** Nach 2+ Stunden Deep Work verlierst du Perspektive.
+
+**Lösung:**
+1. Nach 60–90 Minuten: Pause
+2. Nach Pause: Re-read (lies, was du geschrieben hast)
+3. Falls "klingt komisch" → Nutze `critic.prompt.md`
+
+**Symptome für "zu lange ohne Pause":**
+- Text wird abschweifend
+- Struktur verschwimmt
+- Buzzwords schleichen sich ein
+- Du ignorierst Prompts ("ich mach das schnell selbst")
+
+**Counter-Measure:**
+- Setze Timer (Pomodoro: 25 min Work, 5 min Pause)
+- Nutze Prompts als Struktur-Anker
+- Worklog nach jeder Session (erzwingt Reflexion)
+
+---
+
+### Regel H10: LLM ist Werkzeug, nicht Co-Autor
+
+**Du bist verantwortlich für:**
+- ✅ Intent (was soll erreicht werden?)
+- ✅ Entscheidungen (welche Richtung?)
+- ✅ Qualität (ist das gut genug?)
+- ✅ Voice (klingt das nach mir?)
+
+**LLM ist verantwortlich für:**
+- ✅ Struktur (Blueprint → Draft-Transformation)
+- ✅ Vollständigkeit (alle DoD-Kriterien erfüllt?)
+- ✅ Konsistenz (Glossar, Claims, Stil)
+
+**LLM ist NICHT verantwortlich für:**
+- ❌ Kreative Entscheidungen (welche Metapher?)
+- ❌ Strategische Entscheidungen (welches Kapitel zuerst?)
+- ❌ Finale Abnahme (du entscheidest über PASS/FAIL)
+
+**Analogie:**
+- LLM = Compiler (macht aus Spezifikation Code)
+- Du = Software-Architekt (schreibst Spezifikation)
+
+---
+
+### Regel H11: Review in Etappen, nicht auf einmal
+
+**Anti-Pattern:**
+- ❌ "Ich reviewe das ganze Kapitel am Ende"
+
+**Best Practice:**
+- ✅ Review nach jedem Schritt:
+  1. Blueprint vollständig? → Checklist
+  2. Draft entspricht Blueprint? → `critic.prompt.md`
+  3. Claims notiert? → `claim-extractor.prompt.md`
+  4. Glossar konsistent? → `glossar-checker.prompt.md`
+  5. Code valide? → `snippet-linter.prompt.md`
+  6. Rechtschreibung? → `style-enforcer.prompt.md`
+
+**Warum?**
+- Frühe Fehler sind billig zu fixen
+- Späte Fehler erfordern Rewrite
+- Prompts geben dir sofortiges Feedback
+
+---
+
+### Regel H12: Wenn du nicht weiterkommst – kleinsten Schritt finden
+
+**Problem:** "Ich weiß nicht, wie ich anfangen soll."
+
+**Lösung (Decision Tree):**
+
+1. **Gibt es ein Blueprint?**
+   - Nein → Nutze `blueprint-fill.prompt.md`
+   - Ja → Weiter zu 2
+
+2. **Ist das Blueprint vollständig?**
+   - Nein → Fülle fehlende Abschnitte aus
+   - Ja → Weiter zu 3
+
+3. **Gibt es einen Draft?**
+   - Nein → Nutze `chapter-draft.prompt.md`
+   - Ja → Weiter zu 4
+
+4. **Ist der Draft reviewt?**
+   - Nein → Nutze `critic.prompt.md`
+   - Ja → Weiter zu 5
+
+5. **Sind Claims notiert?**
+   - Nein → Nutze `claim-extractor.prompt.md`
+   - Ja → Weiter zu 6
+
+6. **Ist Status-Übergang valide?**
+   - Nein → Nutze `status-transition.prompt.md` → Blocker beheben
+   - Ja → Status ändern, fertig
+
+**Der kleinste Schritt ist immer:** "Was ist der nächste unvollständige Abschnitt?"
+
+---
+
+### Regel H13: Automatisierung nutzen (weniger Friction)
+
+**Manuelle Arbeit minimieren:**
+
+| Aufgabe | Manuell | Automatisiert |
+|---------|---------|---------------|
+| Changelog schreiben | ❌ | ✅ `npm run changelog` |
+| Pattern-Index aktualisieren | ❌ | ✅ `npm run indexes` |
+| Glossar-Begriffe finden | ❌ | ✅ `npm run glossary:suggest` |
+| book.yml aktualisieren | ❌ | ✅ `npm run meta:update` |
+| TOC validieren | ⚠️ | ✅ `toc-validator.prompt.md` |
+| Claims extrahieren | ⚠️ | ✅ `claim-extractor.prompt.md` |
+
+**Setup (einmalig):**
+```bash
+# Git-Hook einrichten (empfohlen)
+cat > .git/hooks/pre-push << 'EOF'
+#!/bin/bash
+npm run meta:update
+if [ -n "$(git status --porcelain manuscript/_meta/)" ]; then
+  echo "⚠️  Meta files changed. Commit and push again."
+  exit 1
+fi
+EOF
+chmod +x .git/hooks/pre-push
+```
+
+**Danach:** Automatisierung läuft bei jedem `git push`.
+
+---
+
+### Regel H14: Bei Unsicherheit – kleinsten Test machen
+
+**Problem:** "Ich bin unsicher, ob diese Kernthese funktioniert."
+
+**Lösung:**
+1. Schreibe Blueprint mit dieser These
+2. Nutze `chapter-draft.prompt.md` für ersten Draft
+3. Lies Draft
+4. Falls "klingt falsch" → Blueprint anpassen, neu generieren
+5. Iteriere (max. 3x)
+
+**Warum funktioniert das?**
+- Blueprint ist klein (15 Minuten)
+- Draft ist generiert (5 Minuten)
+- Iteration ist billig (keine 10 Seiten wegwerfen)
+
+**Anti-Pattern:**
+- ❌ "Ich grüble 2 Stunden über die perfekte These"
+- ✅ "Ich teste 3 Thesen in 45 Minuten (3x15 Minuten)"
+
+---
+
+### Regel H15: Feedback an Prompts dokumentieren
+
+**Wenn ein Prompt nicht funktioniert oder verbessert werden kann:**
+
+1. **Sofort:** Notiere im Worklog
+   ```markdown
+   ## Session 1
+   ...
+   ### Notizen
+   - `critic.prompt.md` gab Score 3/10, aber keine konkreten Fixes
+     → Prompt sollte detailliertere Fix-Vorschläge geben
+   ```
+
+2. **Später (wenn Zeit):** Issue erstellen oder Prompt anpassen
+   ```bash
+   feat(prompts): improve critic.prompt.md fix suggestions
+
+   - Add line numbers to fix suggestions
+   - Add diff-preview for each fix
+   - Prioritize fixes (blocker > critical > medium > low)
+   ```
+
+3. **Versionieren:** Prompt-Version erhöhen (z.B. 0.2.0 → 0.3.0)
+
+**Warum wichtig?**
+- Prompts werden besser über Zeit
+- Du lernst, was funktioniert (und was nicht)
+- Projekt ist selbstverbessernd
+
+---
+
+### Regel H16: Status nur mit Prompt-Validierung ändern
+
+**Du darfst Status NICHT nach Gefühl ändern.**
+
+**Workflow:**
+```bash
+1. Du denkst: "Kapitel ist bereit für review"
+2. Nutze: status-transition.prompt.md
+   - Input: Draft, Status: draft, Ziel: review
+3. Output: PASS oder FAIL
+4. Falls PASS → Status ändern
+5. Falls FAIL → Blocker beheben, erneut validieren
+```
+
+**Anti-Pattern:**
+- ❌ "Sieht gut aus, ich setze Status auf 'final'"
+- ✅ "status-transition.prompt.md sagt PASS → ich setze Status auf 'final'"
+
+**Warum?**
+- Objektive Kriterien (nicht subjektives Gefühl)
+- Verhindert verfrühte Status-Upgrades
+- Macht Qualität messbar
+
+---
+
+### Regel H17: Einen Schritt zurück ist kein Scheitern
+
+**Problem:** "Ich habe Kapitel auf 'review' gesetzt, aber merke jetzt, es fehlt was."
+
+**Lösung:**
+1. Status zurück auf `draft` setzen
+2. Fehlenden Teil ergänzen
+3. Erneut validieren via `status-transition.prompt.md`
+4. Im Worklog dokumentieren: "Status rollback – Beispiel fehlte"
+
+**Das ist kein Scheitern, sondern PDD:**
+- Iterativ
+- Validierbar
+- Rollbar
+
+**Anti-Pattern:**
+- ❌ "Ich lasse Status auf 'review', obwohl es nicht fertig ist" (Selbstbetrug)
+- ✅ "Ich setze Status zurück, behebe das Problem, validiere neu" (ehrlich)
+
+---
+
+### Regel H18: Glossar ist deine Verantwortung
+
+**LLMs können Begriffe vorschlagen, aber DU definierst sie.**
+
+**Workflow:**
+1. Nach jedem Draft: `npm run glossary:suggest`
+2. Prüfe Vorschläge: Sind das zentrale Begriffe?
+3. Definiere manuell in `manuscript/_meta/glossary.md`
+4. Nutze `glossar-checker.prompt.md` für Konsistenz
+
+**Beispiel:**
+```bash
+# LLM schlägt vor:
+- **Disposable Code**: [TODO: Definition]
+
+# Du definierst:
+- **Disposable Code**: Code, der bewusst als kurzlebig konzipiert ist
+  und bei Bedarf neu generiert werden kann, anstatt manuell gepflegt zu werden.
+```
+
+**Warum du (nicht LLM)?**
+- Definitionen sind Intent-Definition (deine Rolle)
+- Definitionen müssen präzise sein (LLM rät oft)
+- Definitionen sind Teil der Buchqualität (nicht delegierbar)
+
+---
+
+### Regel H19: Claims recherchieren, nicht delegieren
+
+**LLMs können Claims extrahieren, aber DU recherchierst Quellen.**
+
+**Workflow:**
+1. Nutze `claim-extractor.prompt.md` → Liste von Claims
+2. Für jeden Claim:
+   - Recherchiere Quelle (Google Scholar, Papers, Studien)
+   - Trage Quelle ein in `manuscript/_research/sources.md`
+   - Verlinke Claim ↔ Quelle in `claims.md`
+3. Falls keine Quelle gefunden:
+   - Option A: Claim streichen (aus Kapitel entfernen)
+   - Option B: Claim abschwächen ("In meiner Praxis..." statt "80% der Teams...")
+   - Option C: Als offene Frage markieren ("Claim benötigt weitere Forschung")
+
+**Anti-Pattern:**
+- ❌ LLM fragen: "Wo kommt diese Statistik her?" (LLM rät)
+- ✅ Selbst recherchieren (Google Scholar, Papers, GitHub Insights, etc.)
+
+---
+
+### Regel H20: Du bist der Quality Gate, nicht das LLM
+
+**Finale Entscheidung liegt IMMER bei dir.**
+
+**Beispiel-Situationen:**
+
+1. **LLM sagt:** "Kapitel ist bereit für 'final'" (via `status-transition.prompt.md`)
+   **Du prüfst:** Lese Kapitel, finde Abschnitt, der "seltsam klingt"
+   **Du entscheidest:** Status bleibt auf `review`, Abschnitt überarbeiten
+
+2. **LLM sagt:** "Keine Glossar-Inkonsistenzen" (via `glossar-checker.prompt.md`)
+   **Du prüfst:** Findest "API-Contract" und "API Contract" (beide im Text)
+   **Du entscheidest:** Inkonsistenz beheben, LLM hatte Fehler
+
+3. **LLM generiert:** Code-Beispiel mit Syntax-Fehler
+   **Du prüfst:** Kopierst Code in Editor, siehst Fehler
+   **Du entscheidest:** Korrektur, nicht blind akzeptieren
+
+**Du bist Architekt, Reviewer, Quality Gate – das LLM ist Werkzeug.**
+
+---
+
+### Regel H21: Session-Budgets einhalten (Disziplin)
+
+**Problem:** "Ich arbeite 4 Stunden, verliere Fokus, produziere Mist."
+
+**Lösung:**
+1. Vor Session: Zeitbudget festlegen (siehe Regel H2)
+2. Timer stellen
+3. Wenn Timer abläuft:
+   - ✅ Stop (auch wenn nicht fertig)
+   - ✅ Commit (auch wenn unvollständig)
+   - ✅ Worklog (auch wenn Ziel nicht erreicht)
+   - ✅ Next Steps notieren
+
+**Warum?**
+- Verhindert Burnout
+- Erzwingt kleine Schritte
+- Macht Fortschritt sichtbar (auch kleine Schritte)
+
+**Quelle:** `workflow-paper.md`, Zeile 8-20
+
+---
+
+### Regel H22: Teste Prompts, bevor du sie einsetzt
+
+**Neuer Prompt (z.B. `takeaway-synthesizer.prompt.md`):**
+
+1. **Erster Test:** Nutze auf existierendem Kapitel
+2. **Validierung:** Sind Takeaways sinnvoll?
+3. **Iteration:** Falls nein → Prompt anpassen
+4. **Erst dann:** Für alle Kapitel verwenden
+
+**Anti-Pattern:**
+- ❌ "Ich nutze neuen Prompt für alle 15 Kapitel ohne Test"
+- ✅ "Ich teste auf 1 Kapitel, iteriere, dann skaliere"
+
+---
+
+### Regel H23: Glossar, Claims, Worklog sind deine Verantwortung
+
+**Diese 3 Artefakte darfst du NICHT vollständig an LLM delegieren:**
+
+| Artefakt | LLM kann | Du musst |
+|----------|----------|----------|
+| **Glossar** | Begriffe vorschlagen | Definitionen schreiben |
+| **Claims** | Fakten extrahieren | Quellen recherchieren |
+| **Worklog** | Struktur generieren | Ehrliche Reflexion |
+
+**Warum?**
+- Glossar: Definitionen sind Intent-Definition (deine Expertise)
+- Claims: Quellen-Recherche ist Faktencheck (deine Verantwortung)
+- Worklog: Reflexion ist Lernen (dein Prozess)
+
+---
+
+## 🎯 TL;DR für Menschen
+
+1. **Du bist Architekt** → Intent, Constraints, Entscheidungen
+2. **LLM ist Werkzeug** → Struktur, Transformation, Konsistenz-Checks
+3. **Zeitbudget setzen** → 15 min / 30 min / 60 min / 2–3 h
+4. **Prompts als Checklisten** → Auch ohne LLM nutzbar
+5. **LLM-Output validieren** → Niemals blind akzeptieren
+6. **Commit early, commit often** → Git ist Sicherheitsnetz
+7. **Worklog ist Pflicht** → Transparenz + Lernen
+8. **"Good enough" > "perfekt"** → Status-Übergänge via Prompts
+9. **Entscheidungen dokumentieren** → Abweichungen begründen
+10. **Pausen machen** → Verhindert Drift
+11. **Du bist Quality Gate** → Finale Entscheidung liegt bei dir
+12. **Session-Budgets einhalten** → Pomodoro-Style
+13. **Prompts testen** → Vor Skalierung
+14. **Glossar, Claims, Worklog** → Deine Verantwortung
+15. **Kleinsten Schritt finden** → Decision Tree bei Blockade
+
+---
+
+## 📚 Cheat Sheet (Quick Reference)
+
+### Ich will ein Kapitel schreiben:
+```
+1. blueprint-fill.prompt.md → Blueprint
+2. chapter-draft.prompt.md → Draft
+3. claim-extractor.prompt.md → Claims
+4. critic.prompt.md → Review
+5. status-transition.prompt.md → Status ändern?
+```
+
+### Ich will ein Pattern dokumentieren:
+```
+1. Kopiere pattern.blueprint.md
+2. Fülle aus (Metadaten, Intent, Lösung, Anti-Pattern, Beispiel)
+3. Nutze example-generator.prompt.md für Code-Beispiele
+4. Index wird automatisch generiert (npm run indexes)
+```
+
+### Ich will eine Case Study schreiben:
+```
+1. Kopiere case-study.blueprint.md
+2. Fülle aus (Ausgangssituation, Herausforderung, Vorgehen, Ergebnisse, Learnings)
+3. Nutze example-generator.prompt.md (Typ: Case Study)
+4. Index wird automatisch generiert
+```
+
+### Ich will Quality-Check machen:
+```
+1. toc-validator.prompt.md → TOC konsistent?
+2. glossar-checker.prompt.md → Begriffe konsistent?
+3. cross-reference-checker.prompt.md → Widersprüche?
+4. snippet-linter.prompt.md → Code valide?
+```
+
+### Ich bin blockiert:
+```
+1. Checke: Gibt es Blueprint? → Nein → blueprint-fill.prompt.md
+2. Checke: Ist Blueprint vollständig? → Nein → Fülle aus
+3. Checke: Gibt es Draft? → Nein → chapter-draft.prompt.md
+4. Checke: Ist Draft reviewt? → Nein → critic.prompt.md
+5. Kleinsten nächsten Schritt identifizieren
+```
+
+### Nach jeder Session:
+```
+1. Commit (auch wenn unfertig)
+2. Worklog (worklog-reminder.prompt.md oder manuell)
+3. npm run meta:update (falls Blueprints/Commits geändert)
+4. Next Steps notieren
+```
+
+---
+
+**Version:** 2.0.0
+**Changelog:**
+- **2.0.0** (2026-02-25): Komplett überarbeitet – 14 Prompts, Automatisierung, **Human-in-the-Loop Verhaltensregeln (H1–H23)**
+- **1.0.0**: Initial

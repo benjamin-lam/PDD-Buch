@@ -1,0 +1,59 @@
+name: Update Meta Files
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'manuscript/**'
+      - 'scripts/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'manuscript/**'
+
+jobs:
+  update-meta:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Alle Git-History für Changelog
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Changelog
+        run: npm run changelog
+
+      - name: Generate Indexes
+        run: npm run indexes
+
+      - name: Update book.yml
+        run: node scripts/update-book-meta.js
+
+      - name: Check for changes
+        id: verify-changed-files
+        run: |
+          if [ -n "$(git status --porcelain manuscript/_meta/)" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit changes
+        if: steps.verify-changed-files.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add manuscript/_meta/
+          git commit -m "chore: auto-update meta files [skip ci]"
+          git push

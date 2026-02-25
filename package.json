@@ -1,0 +1,25 @@
+{
+  "name": "pdd-manifesto",
+  "version": "0.1.0",
+  "description": "The PDD Manifesto - Prompt-Driven Development",
+  "private": true,
+  "scripts": {
+    "changelog": "node scripts/generate-changelog.js",
+    "indexes": "npm run index:patterns && npm run index:cases && npm run index:scenes",
+    "index:patterns": "node scripts/generate-pattern-index.js",
+    "index:cases": "node scripts/generate-case-study-index.js",
+    "index:scenes": "node scripts/generate-scene-index.js",
+    "meta:update": "npm run changelog && npm run indexes && node scripts/update-book-meta.js",
+    "glossary:suggest": "node scripts/suggest-glossary-terms.js",
+    "build": "node scripts/build.js",
+    "check": "node scripts/check.js",
+    "serve": "node scripts/serve.js",
+    "meta:all": "npm run meta:update && git add manuscript/_meta/ && git status"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {},
+  "author": "Benjamin Lam",
+  "license": "SEE LICENSE IN LICENSE"
+}
