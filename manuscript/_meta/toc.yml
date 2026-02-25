@@ -1,0 +1,37 @@
+title: "The PDD Manifesto"
+parts:
+  - id: "teil-1"
+    title: "Teil I: Die Krise der klassischen Entwicklung"
+    chapters:
+      - manuscript/01-krise-klassik/01-ende-der-tippgeschwindigkeit.md
+      - manuscript/01-krise-klassik/02-technical-debt-bitrot.md
+      - manuscript/01-krise-klassik/03-vibe-coding-vs-engineering.md
+
+  - id: "teil-2"
+    title: "Teil II: Das PDD-Framework (Die Methode)"
+    chapters:
+      - manuscript/02-pdd-framework/01-prompt-als-spezifikation.md
+      - manuscript/02-pdd-framework/02-prompt-architektur.md
+      - manuscript/02-pdd-framework/03-der-pdd-loop.md
+
+  - id: "teil-3"
+    title: "Teil III: Architektur & Patterns"
+    chapters:
+      - manuscript/03-architektur-patterns/01-disposable-code.md
+      - manuscript/03-architektur-patterns/02-decoupling-by-intent.md
+      - manuscript/03-architektur-patterns/03-prompt-versionierung.md
+
+  - id: "teil-4"
+    title: "Teil IV: Der Mensch im Loop (New Work)"
+    chapters:
+      - manuscript/04-mensch-im-loop/01-architect-of-intent.md
+      - manuscript/04-mensch-im-loop/02-qs-2-0.md
+      - manuscript/04-mensch-im-loop/03-effizienz-metriken.md
+
+  - id: "teil-5"
+    title: "Teil V: Praxisfälle & Ausblick"
+    chapters:
+      - manuscript/05-praxis-ausblick/01-legacy-migration.md
+      - manuscript/05-praxis-ausblick/02-zukunft-der-programmierung.md
+      - manuscript/05-praxis-ausblick/03-ethik-verantwortung.md
+

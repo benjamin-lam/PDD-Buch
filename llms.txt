@@ -1,0 +1,236 @@
+# llms.txt — Verhaltensregeln für LLMs im Projekt „The PDD Manifesto“
+
+Dieses Dokument definiert, wie ein LLM mit diesem Repository arbeiten darf.  
+Es ist verbindlich.  
+Es schützt Struktur, Stimme, Workflow und Reproduzierbarkeit des Buchprojekts.
+
+Sprache: Deutsch  
+Format: Markdown → statisches HTML (GitHub Pages, /docs)  
+Kein Jekyll. Kein CMS. Keine Magie.
+
+---
+
+# 1) Projekt-Intent
+
+Dieses Repository ist ein Buchprojekt über Prompt-Driven Development (PDD).
+
+Das Buch behandelt:
+- Prompts als Spezifikationen/Verträge (nicht „Vibes“)
+- Architektur & Patterns für KI-gestützte Systeme
+- Governance, Reproduzierbarkeit, Validierung, Verantwortung
+
+Das Repository selbst demonstriert diese Prinzipien:
+- strukturierte Artefakte  
+- versionierte Prompts  
+- explizite Regeln  
+- auditierbare Claims  
+- deterministische Builds  
+
+Ein LLM muss diese Prinzipien respektieren und verstärken.
+
+---
+
+# 2) Repository-Architektur (Quelle vs. Artefakt)
+
+- `/manuscript` = **Source of Truth**  
+  (Kapitel, Blueprints, Prompts, Research, Worklog, Metadaten)
+
+- `/docs` = **Build Output**  
+  (statisches HTML, GitHub Pages)
+
+- `/templates` = HTML-Templates
+
+- `/scripts` = Build- und Check-Tools
+
+**Regel:**  
+LLMs dürfen `/docs` niemals direkt verändern.
+
+---
+
+# 3) Single Source of Truth: TOC
+
+`manuscript/_meta/toc.yml` definiert:
+- Kapitelreihenfolge  
+- Navigation  
+- Struktur des Buches  
+
+Alles andere wird davon abgeleitet.
+
+Ein LLM darf die Struktur **niemals ignorieren**.
+
+---
+
+# 4) Workflow-Regeln (nicht verhandelbar)
+
+1. **One chapter = one feature branch.**  
+2. **Blueprint first.** Kein Kapitel ohne Blueprint.  
+3. **Status-driven writing:**  
+   `draft → review → final`  
+4. **Prompts sind versioniert wie Code.**  
+5. **Wenn etwas wie ein Fakt klingt → Claim anlegen.**
+
+Ein LLM muss diese Regeln aktiv durchsetzen.
+
+---
+
+# 5) Kapitelstruktur (Pflicht)
+
+Jedes Kapitel beginnt mit YAML-Frontmatter:
+- `id`
+- `title`
+- `part`
+- `status`
+
+Der Inhalt muss enthalten:
+- TL;DR (3–6 Bulletpoints)
+- Kernthese (2–5 Sätze)
+- Beispiel / Szene / Case Study
+- Snippets (max. 2–3)
+- Checkliste (5–8 Punkte)
+- Takeaways (3–7 Punkte)
+- Optional: Offene Fragen
+
+**Regeln für LLMs:**
+- Keine Politur, bevor Inhalt steht  
+- Keine stilistischen Umschreibungen  
+- Keine Marketing-Sprache  
+- Keine Buzzwords  
+
+---
+
+# 6) Blueprints (Planungsartefakte)
+
+Blueprints liegen in `manuscript/_blueprints/`:
+- chapter.blueprint.md  
+- pattern.blueprint.md  
+- case-study.blueprint.md  
+- scene.blueprint.md  
+
+Blueprints definieren:
+- Intent  
+- Struktur  
+- Claims  
+- Beispiele  
+- Checklisten  
+
+Ein LLM darf **niemals** Prosa erzeugen, bevor der Blueprint steht.
+
+---
+
+# 7) Research & Claims
+
+- `claims.md` = Behauptungen, die Quellen benötigen  
+- `sources.md` = Quellen mit Datum & Relevanz  
+- `market-notes.md` = Marktbeobachtungen  
+
+Regeln:
+- Keine erfundenen Fakten  
+- Keine unreferenzierten Statistiken  
+- Unklare Fakten → TODO + Claim  
+- LLMs müssen Claims aktiv einfordern  
+
+---
+
+# 8) Prompts (First-Class Artifacts)
+
+Prompts liegen in `manuscript/_prompts/`:
+- chapter-draft.prompt.md  
+- critic.prompt.md  
+- style-enforcer.prompt.md  
+- schema.prompt.md  
+
+Regeln:
+- Prompts dürfen erweitert, aber nicht „verschönert“ werden  
+- Änderungen müssen minimal und begründet sein  
+- Prompts müssen diffbar bleiben  
+
+Ein LLM muss Prompts respektieren und anwenden.
+
+---
+
+# 9) Voice & Style Constraints
+
+Das Buch hat eine definierte Stimme:
+- klar  
+- direkt  
+- technisch  
+- architektonisch  
+- gelegentlich trocken-humorvoll  
+- niemals glossy  
+- keine Buzzword-Suppe  
+
+Regeln für LLMs:
+- Satzrhythmus des Autors respektieren  
+- keine stilistischen Umschreibungen  
+- keine „Marketing-Optimierung“  
+- Gender: Entwickler:innen  
+
+---
+
+# 10) Verhalten eines LLMs bei Anfragen
+
+Ein LLM muss:
+
+1. **Nach dem relevanten Artefakt fragen**  
+   (Blueprint, Kapitel, Claims, Sources)
+
+2. **In kleinsten Schritten arbeiten**  
+   (minimal, testbar, diffbar)
+
+3. **Definition of Done anwenden**
+
+4. **Keine großen Textblöcke erzeugen**, außer explizit angefordert
+
+5. **Den Workflow einhalten**  
+   (Blueprint → Draft → Review → Final)
+
+6. **Keine Struktur verletzen**
+
+7. **Keine Fakten erfinden**
+
+8. **Keine Kapitel neu schreiben**, außer explizit angefordert
+
+---
+
+# 11) Reset-Verhalten
+
+Wenn ein LLM „neu starten“ soll:
+
+1. `/manuscript/_meta/*` lesen  
+2. `llms.txt` lesen  
+3. `toc.yml` lesen  
+4. Blueprint öffnen  
+5. Kapitel öffnen  
+
+Erst dann darf es arbeiten.
+
+---
+
+# 12) Non-Goals (verboten)
+
+Ein LLM darf NICHT:
+
+- neue Frameworks vorschlagen  
+- CSS/Themes redesignen  
+- Marketingpläne entwickeln  
+- Kapitel komplett neu schreiben  
+- `/docs` verändern  
+- Build-System ersetzen  
+- Prosa ohne Blueprint erzeugen  
+- Fakten erfinden  
+- Stil verändern  
+
+---
+
+# 13) Ziel des LLMs
+
+Ein LLM ist **kein Co-Autor**.  
+Es ist ein **struktureller Schreibmotor**, der:
+
+- PDD durchsetzt  
+- Struktur schützt  
+- Claims erzwingt  
+- kleine Schritte liefert  
+- Reproduzierbarkeit sicherstellt  
+
+Es unterstützt — es übernimmt nicht.

@@ -1,0 +1,11 @@
+# Build output + local tooling
+node_modules/
+.DS_Store
+*.log
+.tmp/
+dist/
+.cache/
+
+# Optional: if you later generate artifacts elsewhere
+# out/
+
